@@ -9,19 +9,24 @@
 import SwiftUI
 
 struct SetGameView: View {
-    var deck = SetGameModel()
+    @ObservedObject var setGameVM: SetGameViewModel
     
     var body: some View {
-        Grid(deck.cards) { card in
+        // Grid of 12 cards to play the game with
+        Grid(setGameVM.cards) { card in
             CardView(card: card)
-                .aspectRatio(2/3, contentMode: .fit)
-                .padding(5)
+                .padding(self.cardPadding)
+                .onTapGesture {
+                    self.setGameVM.choose(card: card)
+            }
         }
     }
+    
+    let cardPadding: CGFloat = 10
 }
 
 struct SetGameView_Previews: PreviewProvider {
     static var previews: some View {
-        SetGameView()
+        SetGameView(setGameVM: SetGameViewModel())
     }
 }

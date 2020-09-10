@@ -19,67 +19,33 @@ struct CardView: View {
     
     func body(for size: CGSize) -> some View {
         ZStack {
-            VStack {
-                Spacer()
-                ForEach(0..<card.number.rawValue) {_ in
-                    ZStack {
-                        if self.card.shape == .rectangle {
-                            Rectangle()
-                                .stroke(lineWidth: 2)
-                                .foregroundColor(Color(
-                                    red: self.card.color.getRGB().r,
-                                    green: self.card.color.getRGB().g,
-                                    blue: self.card.color.getRGB().b))
-                            
-                            Rectangle()
-                                .foregroundColor(Color(.sRGB,
-                                                       red: self.card.color.getRGB().r,
-                                                       green: self.card.color.getRGB().g,
-                                                       blue: self.card.color.getRGB().b,
-                                                       opacity: self.card.shading.rawValue))
-                        } else if self.card.shape == .capsule {
-                            Capsule()
-                                .stroke(lineWidth: 2)
-                                .foregroundColor(Color(
-                                    red: self.card.color.getRGB().r,
-                                    green: self.card.color.getRGB().g,
-                                    blue: self.card.color.getRGB().b))
-                            
-                            Capsule()
-                                .foregroundColor(Color(.sRGB,
-                                                       red: self.card.color.getRGB().r,
-                                                       green: self.card.color.getRGB().g,
-                                                       blue: self.card.color.getRGB().b,
-                                                       opacity: self.card.shading.rawValue))
-                        } else {
-                            Diamond()
-                                .stroke(lineWidth: 2)
-                                .foregroundColor(Color(
-                                    red: self.card.color.getRGB().r,
-                                    green: self.card.color.getRGB().g,
-                                    blue: self.card.color.getRGB().b))
-                            Diamond()
-                                .foregroundColor(Color(.sRGB,
-                                                       red: self.card.color.getRGB().r,
-                                                       green: self.card.color.getRGB().g,
-                                                       blue: self.card.color.getRGB().b,
-                                                       opacity: self.card.shading.rawValue))
-                        }
-                    }.aspectRatio(2.5, contentMode: .fit)
-                    Spacer()
-                }
+            RoundedRectangle(cornerRadius: 10).stroke(lineWidth: 3)
+            
+            // AnyTransition.offset(CGSize)
+
+            if card.isSelected {
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundColor(.gray)
+            } else {
+                RoundedRectangle(cornerRadius: 10)
+                .foregroundColor(.white)
             }
+            
+            CardContents(card: self.card)
         }
     }
+    
+    let shapePadding: CGFloat = 20
+    let shapeAspectRatio: CGFloat = 2.5
+    let shapeLineWidth: CGFloat = 3
 }
 
 struct CardView_Previews: PreviewProvider {
     static var previews: some View {
         CardView(card: SetGameModel.Card(id: 0,
-                              SetGameModel.CardNumberOfShapes.one,
+                              SetGameModel.CardNumberOfShapes.three,
                               SetGameModel.CardShading.light,
-                              SetGameModel.CardShape.capsule,
+                              SetGameModel.CardShape.rectangle,
                               SetGameModel.CardColor.green))
-        .padding(10)
     }
 }
